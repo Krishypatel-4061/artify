@@ -24,7 +24,7 @@ export default function MarketplacePage() {
   // Filter States
   const [selectedCategories, setSelectedCategories] = React.useState<string[]>([]);
   const [selectedStyles, setSelectedStyles] = React.useState<string[]>([]);
-  const [priceRange, setPriceRange] = React.useState<number>(5.0);
+  const [priceRange, setPriceRange] = React.useState<number>(10.0);
   const [availability, setAvailability] = React.useState<string[]>([]);
   const [sortBy, setSortBy] = React.useState("latest");
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -32,7 +32,7 @@ export default function MarketplacePage() {
   // Constants
   const categories = ["Abstract", "3D Render", "Photography", "Minimalism", "Cyberpunk", "Nature", "Surrealism"];
   const styles = ["Cyberpunk", "Surrealism", "Retro-Futurism", "Organic"];
-  const itemsPerPage = 8;
+  const itemsPerPage = 20;
 
   React.useEffect(() => {
     async function loadData() {
@@ -75,7 +75,7 @@ export default function MarketplacePage() {
   const resetAllFilters = () => {
     setSelectedCategories([]);
     setSelectedStyles([]);
-    setPriceRange(5.0);
+    setPriceRange(10.0);
     setAvailability([]);
     setSearchQuery("");
     setSortBy("latest");

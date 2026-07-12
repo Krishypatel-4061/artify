@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { db } from "@/services/database.service";
 import { storage } from "@/services/storage.service";
+import { auth } from "@/services/auth.service";
 import { toast } from "sonner";
 
 export default function UploadArtworkPage() {
@@ -90,6 +91,9 @@ export default function UploadArtworkPage() {
       const uploadedUrl = await storage.uploadFile(file, "artworks");
       toast.dismiss();
 
+      const currentUser = await auth.getCurrentUser();
+      if (!currentUser) throw new Error("Not authenticated");
+
       // Step 2: Create artwork record in database
       toast.loading("Publishing artwork...");
       await db.createArtwork({
@@ -98,8 +102,8 @@ export default function UploadArtworkPage() {
         price: parseFloat(price),
         ethPrice: parseFloat(price) / 2500, // mock conversion
         imageUrl: uploadedUrl,
-        artistId: "68c2e21d-1618-4b16-845a-bf6ee1cc3c80",
-        artistName: "CyberPunkDude",
+        artistId: currentUser.id,
+        artistName: currentUser.name,
         tag: category,
         category: category,
         status: "Published",

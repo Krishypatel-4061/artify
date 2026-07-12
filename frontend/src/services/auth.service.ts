@@ -1,71 +1,64 @@
-// Authentication Service for Artify Cloud
+// Placeholder Authentication Service for Artify Cloud
 import { User } from "./database.service";
+import Cookies from "js-cookie";
 
 class AuthService {
-  private currentUser: User | null = null;
-
-  constructor() {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("auth_user");
-      if (stored) {
-        try {
-          this.currentUser = JSON.parse(stored);
-        } catch (e) {
-          console.error("Failed to parse stored user", e);
-        }
-      }
-    }
+  private get defaultUser(): User {
+    return {
+      id: "68c2e21d-1618-4b16-845a-bf6ee1cc3c80",
+      name: "CyberPunkDude",
+      email: "artist@artify.cloud",
+      role: "artist",
+    };
   }
 
   async getCurrentUser(): Promise<User | null> {
-    return this.currentUser;
-  }
-
-  async register(data: { name: string; email: string; password: string; role: string }): Promise<User> {
-    const res = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
-      throw new Error(errorData.error || "Failed to register");
-    }
-
-    const user = await res.json();
-    this.currentUser = user;
     if (typeof window !== "undefined") {
-      localStorage.setItem("auth_user", JSON.stringify(user));
+      const stored = Cookies.get("mock_auth_user");
+      if (stored) {
+        return JSON.parse(stored);
+      }
+      return null;
+    } else {
+      try {
+        const { cookies } = await import("next/headers");
+        const cookieStore = await cookies();
+        const stored = cookieStore.get("mock_auth_user")?.value;
+        if (stored) {
+          return JSON.parse(stored);
+        }
+      } catch (err) {
+        // next/headers might fail if not in a server component context
+      }
+      return null;
     }
-    return user;
   }
 
   async login(email: string, password: string): Promise<User> {
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (email === "artist@artify.cloud") {
+          const user = this.defaultUser;
+          if (typeof window !== "undefined") {
+            Cookies.set("mock_auth_user", JSON.stringify(user), { expires: 7 });
+          }
+          resolve(user);
+        } else {
+          reject(new Error("Invalid credentials"));
+        }
+      }, 800);
     });
-
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
-      throw new Error(errorData.error || "Invalid credentials");
-    }
-
-    const user = await res.json();
-    this.currentUser = user;
-    if (typeof window !== "undefined") {
-      localStorage.setItem("auth_user", JSON.stringify(user));
-    }
-    return user;
   }
 
   async logout(): Promise<void> {
-    this.currentUser = null;
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("auth_user");
-    }
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        if (typeof window !== "undefined") {
+          Cookies.remove("mock_auth_user");
+        }
+        resolve();
+      }, 300);
+    });
   }
 }
 

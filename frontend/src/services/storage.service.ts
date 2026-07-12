@@ -21,8 +21,7 @@ class StorageService {
       return (data as Record<string, string>).url;
     } catch (error) {
       console.error("[StorageService] Upload failed:", error);
-      // Fallback: return a mock URL so the UI doesn't break
-      return `https://mock-storage.com/${path}/${file.name}`;
+      throw error;
     }
   }
 

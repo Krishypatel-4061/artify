@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { db } from "@/services/database.service";
+import { auth } from "@/services/auth.service";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ArtworkCard } from "@/components/shared/ArtworkCard";
 import { CommentForm } from "@/components/shared/CommentForm";
@@ -28,6 +29,7 @@ export default async function ArtworkDetailsPage({
 }) {
   const resolvedParams = await params;
   const artwork = await db.getArtworkById(resolvedParams.id);
+  const currentUser = await auth.getCurrentUser();
 
   if (!artwork) {
     notFound();
@@ -182,7 +184,7 @@ export default async function ArtworkDetailsPage({
             </div>
 
             {/* Write a comment */}
-            <CommentForm artworkId={artwork.id} userId="68c2e21d-1618-4b16-845a-bf6ee1cc3c80" />
+            {currentUser && <CommentForm artworkId={artwork.id} userId={currentUser.id} />}
 
             {/* Comments List */}
             <div className="space-y-4">

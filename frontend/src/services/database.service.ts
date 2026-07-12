@@ -292,8 +292,12 @@ function isServer(): boolean {
  */
 function mapApiArtwork(raw: Record<string, unknown>): Artwork {
   const artist = raw.artist as Record<string, unknown> | undefined;
+  const id = raw.id as string;
+  const mockMatch = MOCK_ARTWORKS.find(m => m.id === id) || {};
+
   return {
-    id: raw.id as string,
+    ...mockMatch,
+    id,
     title: raw.title as string,
     description: raw.description as string,
     price: raw.price as number,
@@ -316,17 +320,21 @@ async function fetchArtworksFromDB(): Promise<Artwork[]> {
       include: { artist: true },
       orderBy: { createdAt: "desc" },
     });
-    return artworks.map((a: DBArtworkWithArtist) => ({
-      id: a.id,
-      title: a.title,
-      description: a.description,
-      price: a.price,
-      imageUrl: a.imageUrl,
-      artistId: a.artistId,
-      artistName: a.artist.name,
-      createdAt: a.createdAt,
-      status: "Published" as const,
-    }));
+    return artworks.map((a: DBArtworkWithArtist) => {
+      const mockMatch = MOCK_ARTWORKS.find(m => m.id === a.id) || {};
+      return {
+        ...mockMatch,
+        id: a.id,
+        title: a.title,
+        description: a.description,
+        price: a.price,
+        imageUrl: a.imageUrl,
+        artistId: a.artistId,
+        artistName: a.artist.name,
+        createdAt: a.createdAt,
+        status: "Published" as const,
+      };
+    });
   } catch (error) {
     console.warn("[DatabaseService] Prisma query failed, using mock data:", error);
     return [];

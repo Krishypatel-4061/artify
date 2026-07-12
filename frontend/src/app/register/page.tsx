@@ -17,23 +17,14 @@ export default function RegisterPage() {
   const [role, setRole] = React.useState("buyer");
   const [loading, setLoading] = React.useState(false);
 
-  const [error, setError] = React.useState<string | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
-    
-    try {
-      // @ts-ignore
-      const { auth } = await import("@/services/auth.service");
-      await auth.register({ name, email, password, role });
-      router.push("/dashboard/artist");
-    } catch (err: any) {
-      setError(err.message || "Registration failed");
-    } finally {
+    // Simulate register
+    setTimeout(() => {
       setLoading(false);
-    }
+      router.push("/dashboard/artist");
+    }, 1000);
   };
 
   return (
@@ -58,11 +49,6 @@ export default function RegisterPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4 text-sm font-semibold">
-            {error && (
-              <div className="p-3 bg-destructive/10 border border-destructive/20 text-destructive rounded-xl text-xs font-bold">
-                {error}
-              </div>
-            )}
             
             {/* Full Name */}
             <div className="space-y-1.5">
