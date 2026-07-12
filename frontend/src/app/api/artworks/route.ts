@@ -39,6 +39,6 @@ export async function POST(request: Request) {
     if (message.includes("40615") || message.includes("firewall") || message.includes("login")) {
       return NextResponse.json({ error: "Azure SQL firewall blocked client IP. Please whitelist this IP on Azure SQL server." }, { status: 500 });
     }
-    return NextResponse.json({ error: "Failed to create artwork" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create artwork", details: error.message, stack: error.stack }, { status: 500 });
   }
 }

@@ -117,10 +117,10 @@ export default function UploadArtworkPage() {
 
       toast.success("Artwork published successfully!");
       router.push("/dashboard/artist");
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       toast.dismiss();
-      toast.error("Failed to publish artwork. Please try again.");
+      toast.error(error.message || "Failed to publish artwork. Please try again.");
     } finally {
       setSubmitting(false);
     }
