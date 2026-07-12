@@ -184,7 +184,7 @@ export default async function ArtworkDetailsPage({
             </div>
 
             {/* Write a comment */}
-            {currentUser && <CommentForm artworkId={artwork.id} userId={currentUser.id} />}
+            {currentUser && <CommentForm artworkId={artwork.id} userId={currentUser.id} userName={currentUser.name} />}
 
             {/* Comments List */}
             <div className="space-y-4">

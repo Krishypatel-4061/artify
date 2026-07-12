@@ -413,6 +413,7 @@ class DatabaseService {
           price: data.price,
           imageUrl: data.imageUrl,
           artistId: data.artistId,
+          artistName: data.artistName,
         }),
       });
 

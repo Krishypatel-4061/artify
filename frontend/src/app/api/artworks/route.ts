@@ -21,7 +21,19 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { title, description, price, imageUrl, artistId } = body;
+    const { title, description, price, imageUrl, artistId, artistName } = body;
+
+    // Ensure the artist exists in the database to prevent foreign key constraint failures
+    await prisma.user.upsert({
+      where: { id: artistId },
+      update: {},
+      create: {
+        id: artistId,
+        name: artistName || "Unknown Artist",
+        email: `${artistId}@artify.cloud`,
+        role: "artist"
+      }
+    });
 
     const artwork = await prisma.artwork.create({
       data: {

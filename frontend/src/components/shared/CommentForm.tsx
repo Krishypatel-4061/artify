@@ -9,9 +9,10 @@ import { useRouter } from "next/navigation";
 interface CommentFormProps {
   artworkId: string;
   userId: string;
+  userName: string;
 }
 
-export function CommentForm({ artworkId, userId }: CommentFormProps) {
+export function CommentForm({ artworkId, userId, userName }: CommentFormProps) {
   const router = useRouter();
   const [content, setContent] = React.useState("");
   const [submitting, setSubmitting] = React.useState(false);
@@ -27,6 +28,7 @@ export function CommentForm({ artworkId, userId }: CommentFormProps) {
         body: JSON.stringify({
           artworkId,
           userId,
+          userName,
           content: content.trim(),
         }),
       });

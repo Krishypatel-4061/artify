@@ -4,7 +4,19 @@ import { prisma } from "@/lib/prisma";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { artworkId, userId, content } = body;
+    const { artworkId, userId, userName, content } = body;
+
+    // Ensure the user exists in the database to prevent foreign key constraint failures
+    await prisma.user.upsert({
+      where: { id: userId },
+      update: {},
+      create: {
+        id: userId,
+        name: userName || "Unknown User",
+        email: `${userId}@artify.cloud`,
+        role: "buyer"
+      }
+    });
 
     const comment = await prisma.comment.create({
       data: {
