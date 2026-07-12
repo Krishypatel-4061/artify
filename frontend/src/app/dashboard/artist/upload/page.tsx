@@ -41,8 +41,8 @@ export default function UploadArtworkPage() {
       toast.error("Invalid file type. Please upload an image.");
       return false;
     }
-    if (selectedFile.size > 20 * 1024 * 1024) {
-      toast.error("File is too large. Maximum size is 20MB.");
+    if (selectedFile.size > 4.5 * 1024 * 1024) {
+      toast.error("File is too large. Vercel deployment limits uploads to 4.5MB.");
       return false;
     }
     return true;

@@ -13,11 +13,19 @@ class StorageService {
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error((errorData as Record<string, string>).error || "Failed to upload file to Azure Blob Storage");
+        const text = await response.text();
+        let errorMsg = "Failed to upload file to Azure Blob Storage";
+        try {
+          const errorData = JSON.parse(text);
+          errorMsg = errorData.error || errorMsg;
+        } catch (e) {
+          errorMsg = `Server error ${response.status}: ${text.substring(0, 100)}`;
+        }
+        throw new Error(errorMsg);
       }
 
-      const data = await response.json();
+      const text = await response.text();
+      const data = JSON.parse(text);
       return (data as Record<string, string>).url;
     } catch (error) {
       console.error("[StorageService] Upload failed:", error);
