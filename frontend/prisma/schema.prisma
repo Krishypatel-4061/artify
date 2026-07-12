@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(uuid())
+  name      String
+  email     String     @unique
+  password  String
+  role      String     // 'artist' or 'buyer'
+  avatarUrl String?
+  createdAt DateTime   @default(now())
+  
+  artworks  Artwork[]  @relation("ArtistArtworks")
+  purchases Purchase[] @relation("BuyerPurchases")
+  comments  Comment[]
+}
+
+model Artwork {
+  id          String     @id @default(uuid())
+  title       String
+  description String
+  price       Float
+  imageUrl    String
+  artistId    String
+  createdAt   DateTime   @default(now())
+
+  artist      User       @relation("ArtistArtworks", fields: [artistId], references: [id])
+  purchases   Purchase[]
+  comments    Comment[]
+}
+
+model Purchase {
+  id        String   @id @default(uuid())
+  artworkId String
+  buyerId   String
+  amount    Float
+  status    String   @default("pending") // pending, processing, completed, failed
+  createdAt DateTime @default(now())
+
+  artwork   Artwork  @relation(fields: [artworkId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  buyer     User     @relation("BuyerPurchases", fields: [buyerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  artworkId String
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+
+  artwork   Artwork  @relation(fields: [artworkId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user      User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}

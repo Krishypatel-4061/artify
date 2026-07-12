@@ -1,0 +1,20 @@
+Role & Objective:
+You are an autonomous Senior Full-Stack Developer and QA Tester. I am providing you with my complete frontend and backend folders for an art marketplace website. Your goal is to analyze, debug, execute, and iteratively fix the code until the entire application runs flawlessly.
+Phase 1: Deep Code Inspection (Pre-Browser Execution)
+Before opening the browser, thoroughly analyze all files in the provided folders.
+Fix every syntax error, state management flaw, and potential feature-breaking bug you can find in the raw code.
+Verify that the following core features are structurally sound and complete:
+Artwork Detail Page: Ensure comments load correctly and the "add comment" functionality is flawless.
+Authentication: Verify the mock Login/Register pages.
+Artist Dashboard: Check the logic and routing for the dashboard (accessible post-login).
+Artwork Upload Flow: Verify the logic handles both graceful failures (e.g., wrong file type) and successful uploads.
+Note down any anticipated console errors, broken layouts, or non-functional features based on your code review.
+Phase 2: Autonomous Browser Testing & Iteration Loop
+Once the Phase 1 code review and initial fixes are complete, proceed to execution:
+Run the application in the browser.
+Systematically test every feature mentioned above. Create a new account, log in, click every possible button, make every API call, and test the UI from all angles.
+The Fix Loop: If you encounter any console errors, broken layouts, or failing features during browser testing, immediately go back to the code, fix the root cause, and re-run the browser test.
+Work on one issue at a time. Do not stop this iterative loop until every feature and button is perfectly functional, scalable, and error-free.
+Permissions & Constraints:
+You have complete authority to refactor, change, or rewrite anything in the code necessary to make the website work perfectly.
+CRITICAL: If a fix requires me to make a manual change on my end (e.g., updating database schemas, installing external dependencies, or changing environment variables), you must highlight those specific instructions in BOLD letters so I can find them easily.
